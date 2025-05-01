@@ -1,35 +1,20 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-
-import React from 'react'
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/LoginPage";
+import Register from "./pages/Register"; // Make sure file name matches
 
 function App() {
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Login/>}/>
-    </Routes>
-
+      <Routes>
+        {/* Redirect root to /login */}
+        <Route path="/" element={<Navigate to="/login" />} />
+        {/* Auth Pages */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
-
-// function App() {
-//   return (
-//     <BrowserRouter>
-//       <Routes>
-//         <Route path="/" element={Login}>
-//           {/* <Route index element={<Home />} /> */}
-//           {/* <Route path="blogs" element={<Blogs />} />
-//           <Route path="contact" element={<Contact />} /> */}
-//           {/* <Route path="*" element={<NoPage />} /> */}
-//         </Route>
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// }
-
-// export default App;
-
+export default App;
