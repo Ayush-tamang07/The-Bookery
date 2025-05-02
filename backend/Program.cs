@@ -46,7 +46,7 @@ builder.Services.AddAuthorization(options =>
 
     // Policy for User role
     options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
-    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("Staff"));
+    options.AddPolicy("RequireStaffRole", policy => policy.RequireRole("Staff"));
 });
 
 builder.Services.AddScoped<TokenService>();

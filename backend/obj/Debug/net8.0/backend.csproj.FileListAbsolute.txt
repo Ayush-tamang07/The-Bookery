@@ -104,6 +104,7 @@ D:\The Bookery\backend\obj\Debug\net8.0\backend.AssemblyInfo.cs
 D:\The Bookery\backend\obj\Debug\net8.0\backend.csproj.CoreCompileInputs.cache
 D:\The Bookery\backend\obj\Debug\net8.0\backend.MvcApplicationPartsAssemblyInfo.cs
 D:\The Bookery\backend\obj\Debug\net8.0\backend.MvcApplicationPartsAssemblyInfo.cache
+D:\The Bookery\backend\obj\Debug\net8.0\backend.sourcelink.json
 D:\The Bookery\backend\obj\Debug\net8.0\scopedcss\bundle\backend.styles.css
 D:\The Bookery\backend\obj\Debug\net8.0\staticwebassets.build.json
 D:\The Bookery\backend\obj\Debug\net8.0\staticwebassets.development.json
@@ -120,3 +121,4 @@ D:\The Bookery\backend\obj\Debug\net8.0\refint\backend.dll
 D:\The Bookery\backend\obj\Debug\net8.0\backend.pdb
 D:\The Bookery\backend\obj\Debug\net8.0\backend.genruntimeconfig.cache
 D:\The Bookery\backend\obj\Debug\net8.0\ref\backend.dll
+D:\The Bookery\backend\bin\Debug\net8.0\backend.staticwebassets.runtime.json

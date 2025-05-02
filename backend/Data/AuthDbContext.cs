@@ -1,4 +1,5 @@
 using System;
+using backend.Model;
 using Backend.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,5 +11,6 @@ public class AuthDbContext: DbContext
     {
     }
     public DbSet<User> Users { get; set; }
+    public DbSet<Book> Books { get; set; }
 
 }
