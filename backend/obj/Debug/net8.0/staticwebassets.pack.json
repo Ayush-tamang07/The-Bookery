@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\uploads\\b0851c62-2f56-4d94-ba66-3f6baafa9452.png"
     },
     {
+      "Id": "D:\\The Bookery\\backend\\wwwroot\\uploads\\d3b5e245-cc7b-4f0c-9c38-b5778a485659.png",
+      "PackagePath": "staticwebassets\\uploads\\d3b5e245-cc7b-4f0c-9c38-b5778a485659.png"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.backend.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },

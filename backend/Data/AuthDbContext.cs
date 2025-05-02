@@ -13,4 +13,8 @@ public class AuthDbContext: DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Book> Books { get; set; }
 
+    internal async Task SaveChangesAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
