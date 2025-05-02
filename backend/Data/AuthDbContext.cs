@@ -12,9 +12,10 @@ public class AuthDbContext: DbContext
     }
     public DbSet<User> Users { get; set; }
     public DbSet<Book> Books { get; set; }
+    public DbSet<BookMark> BookMarks{ get; set; }
 
-    internal async Task SaveChangesAsync()
-    {
-        throw new NotImplementedException();
-    }
+    // internal async Task SaveChangesAsync()
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

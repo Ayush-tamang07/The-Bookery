@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using backend.Model;
 
 namespace Backend.Model
 {
@@ -21,5 +22,7 @@ namespace Backend.Model
 
         [Required]
         public string Role { get; set; } = "User"; // Default role
+
+        public ICollection<BookMark> BookMarks { get; set; }
     }
 }

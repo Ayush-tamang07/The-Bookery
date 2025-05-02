@@ -1,121 +1,135 @@
-// using Microsoft.AspNetCore.Http;
-// using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using backend.Data;
+using backend.DTOs.Request;
+using backend.DTOs.Response;
+using backend.Model;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-// namespace backend.Controllers
-// {
+namespace backend.Controllers
+{
 
-//     [Route("user")]
-//     [ApiController]
-//     [Authorize] // All endpoints require authentication
-//     public class UserController : ControllerBase
-//     {
-//         private readonly AuthDbContext _context;
+    [Route("api/user")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly AuthDbContext _context;
 
-//         public UserController(AuthDbContext context)
-//         {
-//             _context = context;
-//         }
+        public UserController(AuthDbContext context)
+        {
+            _context = context;
+        }
 
-//         [HttpGet]
-//         [HttpGet("getallusers")]
-//         [Authorize(Policy = "RequireAdminRole")]
-//         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
-//         {
-//             var users = await _context.Users.ToListAsync();
+        [HttpGet("getbook")]
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks()
+        {
+            var bookList = await _context.Books.ToListAsync();
 
-//             // Map users to UserDTO
-//             var userDtos = users.Select(u => new UserDTO
-//             {
-//                 Id = u.Id,
-//                 Username = u.Username,
-//                 Email = u.Email,
-//                 Role = u.Role
-//             }).ToList();
+            // Map users to UserDTO
+            var book = bookList.Select(b => new BookDTO
+            {
+                BookId = b.BookId,
+                Title = b.Title,
+                Description = b.Description,
+                Author = b.Author,
+                Genre = b.Genre,
+                Image = b.Image,
+                PublishDate = b.PublishDate,
+                Publisher = b.Publisher,
+                Language = b.Language,
+                Format = b.Format,
+                ISBN = b.ISBN,
+                Price = b.Price,
+                Quantity = b.Quantity,
+                Discount = b.Discount,
+                CreatedAt = b.CreatedAt
+            }).ToList();
 
-//             return userDtos;
-//         }
+            return Ok(new
+            {
+                message = "Books retrieved successfully.",
+                data = book
+            });
+        }
+        [HttpGet("getbook/{id}")]
+        public async Task<IActionResult> GetBookByID(Guid id)
+        {
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
+            {
+                return NotFound(new { message = "Book not found" });
+            }
+            return Ok(book);
+        }
 
-//         [HttpGet("getuserbyid/{id}")]
-//         public async Task<ActionResult<UserDTO>> GetUser(int id)
-//         {
-//             // Get the current user's ID and role from the token
-//             var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        // [HttpPost("addbookmark")]
+        // public async Task<IActionResult> addBookmark(BookmarkDTO id)
+        // {
 
-//             if (userClaim == null) return Unauthorized("Invalid!! Token is missing");
+        // }
+        [HttpPost("addbookmark")]
+        [Authorize(Policy = "RequireUserRole")]
+        public async Task<IActionResult> BookmarkBook(AddBookMark dto)
+        {
+            var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
-//             var userId = int.Parse(userClaim.Value);
+            if (userClaim == null)
+                return Unauthorized("Invalid! Token is missing");
 
-//             var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var userId = Guid.Parse(userClaim.Value); // Assuming your UserId is Guid
 
-//             // Check if the user is requesting their own data or is an Admin
-//             if (id != userId && userRole != "Admin")
-//             {
-//                 return Forbid();
-//             }
+            var exists = await _context.BookMarks
+                .AnyAsync(w => w.UserId == userId && w.BookId == dto.BookId);
 
-//             var user = await _context.Users.FindAsync(id);
+            if (exists)
+                return BadRequest("Already bookmarked");
 
-//             if (user == null)
-//             {
-//                 return NotFound();
-//             }
+            var BookMarks = new BookMark
+            {
+                UserId = userId,
+                BookId = dto.BookId,
 
-//             // Map user to UserDTO
-//             var userDto = new UserDTO
-//             {
-//                 Id = user.Id,
-//                 Username = user.Username,
-//                 Email = user.Email,
-//                 Role = user.Role
-//             };
+            };
 
-//             return userDto;
-//         }
+            _context.BookMarks.Add(BookMarks);
+            await _context.SaveChangesAsync();
 
-//         [HttpPut("updaterole/{id}")]
-//         [Authorize(Policy = "RequireAdminRole")]
-//         public async Task<IActionResult> UpdateUserRole(int id, [FromBody] string role)
-//         {
-//             // Validate role
-//             if (role != "Admin" && role != "User")
-//             {
-//                 return BadRequest("Invalid role. Role must be 'Admin' or 'User'");
-//             }
+            return Ok("Bookmarked successfully");
+        }
 
-//             // Find user by ID
-//             var user = await _context.Users.FindAsync(id);
-//             if (user == null)
-//             {
-//                 return NotFound();
-//             }
+        [HttpGet("getbookmark")]
+        [Authorize(Policy = "RequireUserRole")]
+        public async Task<IActionResult> GetBookMark()
+        {
+            var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
-//             // Update user role
-//             user.Role = role;
+            if (userClaim == null)
+                return Unauthorized("Invalid! Token is missing");
 
-//             // Save changes to database
-//             try
-//             {
-//                 await _context.SaveChangesAsync();
-//             }
-//             catch (DbUpdateConcurrencyException)
-//             {
-//                 if (!UserExists(id))
-//                 {
-//                     return NotFound();
-//                 }
-//                 else
-//                 {
-//                     throw;
-//                 }
-//             }
+            var userId = Guid.Parse(userClaim.Value);
 
-//             return NoContent();
-//         }
+            var bookMarks = await _context.BookMarks
+                .Where(b => b.UserId == userId)
+                .ToListAsync();
 
-//         // Helper method to check if a user exists
-//         private bool UserExists(int id)
-//         {
-//             return _context.Users.Any(e => e.Id == id);
-//         }
-//     }
-// }
+            if (!bookMarks.Any())
+            {
+                return NotFound(new { message = "No bookmarks found" });
+            }
+
+            var result = bookMarks.Select(b => new BookMarkDTO
+            {
+                BookId = b.BookId,
+                UserId = b.UserId
+            }).ToList();
+
+            return Ok(result);
+        }
+
+
+
+    }
+}

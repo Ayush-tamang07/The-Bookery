@@ -73,38 +73,6 @@ namespace backend.Controllers
             });
         }
 
-        [HttpGet("getBook")]
-        [Authorize(Policy = "RequireAdminRole")]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks()
-        {
-            var bookList = await _context.Books.ToListAsync();
-
-            // Map users to UserDTO
-            var book = bookList.Select(b => new BookDTO
-            {
-                BookId = b.BookId,
-                Title = b.Title,
-                Description = b.Description,
-                Author = b.Author,
-                Genre = b.Genre,
-                Image = b.Image,
-                PublishDate = b.PublishDate,
-                Publisher = b.Publisher,
-                Language = b.Language,
-                Format = b.Format,
-                ISBN = b.ISBN,
-                Price = b.Price,
-                Quantity = b.Quantity,
-                Discount = b.Discount,
-                CreatedAt = b.CreatedAt
-            }).ToList();
-
-            return Ok(new
-            {
-                message = "Books retrieved successfully.",
-                data = book
-            });
-        }
 
         [HttpDelete("deleteBook/{id}")]
         [Authorize("RequireAdminRole")]
@@ -122,6 +90,7 @@ namespace backend.Controllers
 
             return Ok(new { message = "Book deleted successfully." });
         }
+        
         [HttpPut("updateBook/{id}")]
         [Authorize("RequireAdminRole")]
         public async Task<IActionResult> UpdateBook(Guid id, [FromBody] AddBookDTO updatedBook)
@@ -147,10 +116,10 @@ namespace backend.Controllers
             book.Quantity = updatedBook.Quantity;
             book.Discount = updatedBook.Discount;
 
+            _context.Books.Update(book);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Book updated successfully.", data = book });
         }
-
     }
 }

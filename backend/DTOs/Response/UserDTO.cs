@@ -13,4 +13,5 @@ public class UserDTO
     [Required]
     public string Password { get; set; } = string.Empty;
     public string Role { get; internal set; }
+    public Guid UserId { get; internal set; }
 }
