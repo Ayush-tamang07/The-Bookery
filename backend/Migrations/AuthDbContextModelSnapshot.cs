@@ -50,6 +50,33 @@ namespace backend.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("backend.Model.Announcement", b =>
+                {
+                    b.Property<Guid>("AnnouncementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("AnnouncementId");
+
+                    b.ToTable("Announcements");
+                });
+
             modelBuilder.Entity("backend.Model.Book", b =>
                 {
                     b.Property<Guid>("BookId")
@@ -134,6 +161,39 @@ namespace backend.Migrations
                     b.ToTable("BookMarks");
                 });
 
+            modelBuilder.Entity("backend.Model.Cart", b =>
+                {
+                    b.Property<Guid>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsCheckedOut")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("PricePerUnit")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts");
+                });
+
             modelBuilder.Entity("backend.Model.BookMark", b =>
                 {
                     b.HasOne("backend.Model.Book", "Book")
@@ -153,14 +213,37 @@ namespace backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("backend.Model.Cart", b =>
+                {
+                    b.HasOne("backend.Model.Book", "Book")
+                        .WithMany("Carts")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Model.User", "User")
+                        .WithMany("Carts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Backend.Model.User", b =>
                 {
                     b.Navigation("BookMarks");
+
+                    b.Navigation("Carts");
                 });
 
             modelBuilder.Entity("backend.Model.Book", b =>
                 {
                     b.Navigation("BookMarks");
+
+                    b.Navigation("Carts");
                 });
 #pragma warning restore 612, 618
         }

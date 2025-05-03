@@ -24,5 +24,6 @@ namespace Backend.Model
         public string Role { get; set; } = "User"; // Default role
 
         public ICollection<BookMark> BookMarks { get; set; }
+        public ICollection<Cart> Carts { get; set; }
     }
 }

@@ -22,7 +22,8 @@ namespace backend.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> Register(RegisterDTO register){
+        public async Task<ActionResult<UserDTO>> Register(RegisterDTO register)
+        {
             // return new UserDTO{};
             if (await _context.Users.AnyAsync(u => u.UserName == register.UserName))
             {
@@ -56,45 +57,44 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             // Return user DTO with token
-            return new UserDTO
-            
-            {
-                // Id = user.UserId,
-                UserName = user.UserName,
-                Email = user.Email,
-                Role = user.Role
-            };
-            
+            return Ok(new
+            {   
+
+                status = 200,
+                data = new UserDTO
+                { 
+                    Email = user.Email,
+                    Role = user.Role
+                }
+            }
+            );
+
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<object>> Login(LoginDTO loginDto)
         {
-            // Find user by username
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == loginDto.UserName);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == loginDto.Email);
 
-            // Check if user exists
             if (user == null)
             {
                 return Unauthorized("Invalid username or password");
             }
 
-            // Verify password
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {
                 return Unauthorized("Invalid username or password");
             }
 
-            // Generate JWT token
             var token = _token.GenerateToken(user);
 
-            // Return token and user information
             return Ok(new
             {
                 Token = token,
+                status = 200,
                 User = new UserDTO
                 {
-                    // Id = user.UserId,
+                    UserId = user.UserId,
                     UserName = user.UserName,
                     Email = user.Email,
                     Role = user.Role

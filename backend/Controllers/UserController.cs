@@ -24,12 +24,27 @@ namespace backend.Controllers
         }
 
         [HttpGet("getbook")]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var bookList = await _context.Books.ToListAsync();
+            if (page <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    status = "error",
+                    code = 400,
+                    message = "Page and pageSize must be greater than 0"
+                });
+            }
+            // var bookList = await _context.Books.ToListAsync();
+            var totalBooks = await _context.Books.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalBooks / (double)pageSize);
+            var books = await _context.Books
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
 
             // Map users to UserDTO
-            var book = bookList.Select(b => new BookDTO
+            var book = books.Select(b => new BookDTO
             {
                 BookId = b.BookId,
                 Title = b.Title,
@@ -48,12 +63,27 @@ namespace backend.Controllers
                 CreatedAt = b.CreatedAt
             }).ToList();
 
+            // return Ok(new
+            // {
+            //     message = "Books retrieved successfully.",
+            //     data = book
+            // });
             return Ok(new
             {
-                message = "Books retrieved successfully.",
+                status = "success",
+                code = 200,
+                message = "Books retrieved successfully",
+                pagination = new
+                {
+                    currentPage = page,
+                    pageSize = pageSize,
+                    totalPages = totalPages,
+                    totalItems = totalBooks
+                },
                 data = book
             });
         }
+
         [HttpGet("getbook/{id}")]
         public async Task<IActionResult> GetBookByID(Guid id)
         {
@@ -128,8 +158,21 @@ namespace backend.Controllers
 
             return Ok(result);
         }
+        [HttpGet("announcements")]
+        public async Task<IActionResult> GetAnnouncements()
+        {
+            var announcements = await _context.Announcements
+                .Where(a => a.IsActive)
+                // .OrderByDescending(a => a.CreatedAt)
+                .Select(a => new AnnouncementDTO
+                {
+                    message = a.message,
+                    StartTime = a.StartTime,
+                    EndTime = a.EndTime
+                })
+                .ToListAsync();
 
-
-
+            return Ok(announcements);
+        }
     }
 }

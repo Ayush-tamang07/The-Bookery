@@ -122,3 +122,9 @@ D:\The Bookery\backend\obj\Debug\net8.0\backend.pdb
 D:\The Bookery\backend\obj\Debug\net8.0\backend.genruntimeconfig.cache
 D:\The Bookery\backend\obj\Debug\net8.0\ref\backend.dll
 D:\The Bookery\backend\bin\Debug\net8.0\backend.staticwebassets.runtime.json
+D:\The Bookery\backend\bin\Debug\net8.0\System.Web.Cors.dll
+D:\The Bookery\backend\bin\Debug\net8.0\System.Net.Http.Formatting.dll
+D:\The Bookery\backend\bin\Debug\net8.0\System.Web.Http.dll
+D:\The Bookery\backend\bin\Debug\net8.0\System.Web.Http.Cors.dll
+D:\The Bookery\backend\bin\Debug\net8.0\Newtonsoft.Json.dll
+D:\The Bookery\backend\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll

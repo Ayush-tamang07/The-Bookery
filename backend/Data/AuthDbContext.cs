@@ -13,6 +13,8 @@ public class AuthDbContext: DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<BookMark> BookMarks{ get; set; }
+    public DbSet<Cart> Carts{ get; set; }
+    public DbSet<Announcement> Announcements{ get; set; }
 
     // internal async Task SaveChangesAsync()
     // {

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using backend.Data;
 using backend.DTOs.Request;
 using backend.DTOs.Response;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Announcement = backend.Model.Announcement;
 
 namespace backend.Controllers
 {
@@ -90,7 +92,7 @@ namespace backend.Controllers
 
             return Ok(new { message = "Book deleted successfully." });
         }
-        
+
         [HttpPut("updateBook/{id}")]
         [Authorize("RequireAdminRole")]
         public async Task<IActionResult> UpdateBook(Guid id, [FromBody] AddBookDTO updatedBook)
@@ -121,5 +123,65 @@ namespace backend.Controllers
 
             return Ok(new { message = "Book updated successfully.", data = book });
         }
+
+        // get user details by admin
+        [HttpGet("getuserdetails")]
+        [Authorize(Policy = "RequireAdminRole")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
+        {
+            var users = await _context.Users.ToListAsync();
+
+            // Map users to UserDTO
+            var userDtos = users.Select(u => new UserDTO
+            {
+                UserId = u.UserId,
+                UserName = u.UserName,
+                Email = u.Email,
+                Role = u.Role
+            }).ToList();
+
+            return userDtos;
+        }
+
+        [HttpPost("addannouncement")]
+        [Authorize(Policy = "RequireAdminRole")]
+        public async Task<IActionResult> addAnnouncement([FromBody] AddAnnouncementDTO dto)
+        {
+            if (dto.StartTime >= dto.EndTime)
+                return BadRequest("Start time must be before end time.");
+            var announcement = new Announcement
+            {
+                AnnouncementId = Guid.NewGuid(),
+                message = dto.message,
+                CreatedAt = dto.CreatedAt,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime
+            };
+
+            _context.Announcements.Add(announcement);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Announcement added successfully", data = announcement });
+        }
+
+        [HttpGet("announcements")]
+        [Authorize(Policy ="RequireAdminRole")]
+        public async Task<IActionResult> GetAnnouncements()
+        {
+            var announcements = await _context.Announcements
+                .OrderByDescending(a => a.CreatedAt)
+                .Select(a => new AnnouncementDTO
+                {
+                    message = a.message,
+                    StartTime = a.StartTime,
+                    EndTime = a.EndTime,
+                    IsActive=a.IsActive,
+                    CreatedAt=a.CreatedAt,
+                })
+                .ToListAsync();
+
+            return Ok(announcements);
+        }
     }
+
+
 }
