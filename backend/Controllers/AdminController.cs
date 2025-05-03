@@ -143,44 +143,8 @@ namespace backend.Controllers
             return userDtos;
         }
 
-        [HttpPost("addannouncement")]
-        [Authorize(Policy = "RequireAdminRole")]
-        public async Task<IActionResult> addAnnouncement([FromBody] AddAnnouncementDTO dto)
-        {
-            if (dto.StartTime >= dto.EndTime)
-                return BadRequest("Start time must be before end time.");
-            var announcement = new Announcement
-            {
-                AnnouncementId = Guid.NewGuid(),
-                message = dto.message,
-                CreatedAt = dto.CreatedAt,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime
-            };
 
-            _context.Announcements.Add(announcement);
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Announcement added successfully", data = announcement });
-        }
 
-        [HttpGet("announcements")]
-        [Authorize(Policy ="RequireAdminRole")]
-        public async Task<IActionResult> GetAnnouncements()
-        {
-            var announcements = await _context.Announcements
-                .OrderByDescending(a => a.CreatedAt)
-                .Select(a => new AnnouncementDTO
-                {
-                    message = a.message,
-                    StartTime = a.StartTime,
-                    EndTime = a.EndTime,
-                    IsActive=a.IsActive,
-                    CreatedAt=a.CreatedAt,
-                })
-                .ToListAsync();
-
-            return Ok(announcements);
-        }
     }
 
 

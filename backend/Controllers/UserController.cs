@@ -158,21 +158,6 @@ namespace backend.Controllers
 
             return Ok(result);
         }
-        [HttpGet("announcements")]
-        public async Task<IActionResult> GetAnnouncements()
-        {
-            var announcements = await _context.Announcements
-                .Where(a => a.IsActive)
-                // .OrderByDescending(a => a.CreatedAt)
-                .Select(a => new AnnouncementDTO
-                {
-                    message = a.message,
-                    StartTime = a.StartTime,
-                    EndTime = a.EndTime
-                })
-                .ToListAsync();
 
-            return Ok(announcements);
-        }
     }
 }
