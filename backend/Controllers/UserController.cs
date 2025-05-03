@@ -158,6 +158,54 @@ namespace backend.Controllers
 
             return Ok(result);
         }
+        [HttpGet("getDetails")]
+        [Authorize(Policy = "RequireUserRole")]
+        public async Task<IActionResult> GetDetails()
+        {
+            var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
+            if (userClaim == null)
+                return Unauthorized("Invalid! Token is missing");
+
+            var userId = Guid.Parse(userClaim.Value);
+
+            var user = await _context.Users
+                .Where(u => u.UserId == userId)
+                .Select(u => new
+                {
+                    u.UserId,
+                    u.UserName,
+                    u.Email,
+                })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+                return NotFound("User not found");
+
+            return Ok(user);
+        }
+        [HttpDelete("bookmark/{id}")]
+        [Authorize(Policy = "RequireUserRole")]
+        public async Task<IActionResult> RemoveBookmark(Guid id)
+        {
+            var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userClaim == null)
+                return Unauthorized("Invalid! Token is missing");
+
+            var userId = Guid.Parse(userClaim.Value);
+
+            // Find the bookmark by BookId and UserId
+            var bookmark = await _context.BookMarks
+                .FirstOrDefaultAsync(b => b.BookMarkId == id);
+
+            if (bookmark == null)
+                return NotFound(new { message = "Bookmark not found" });
+
+            _context.BookMarks.Remove(bookmark);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Bookmark removed successfully" });
+        }
     }
 }
