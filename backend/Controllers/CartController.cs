@@ -13,14 +13,14 @@ namespace backend.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        
+
         private readonly AuthDbContext _context;
 
         public CartController(AuthDbContext context)
         {
             _context = context;
         }
-        
+
 
         [HttpPost("addtocart")]
         [Authorize(Policy = "RequireUserRole")]
@@ -100,6 +100,36 @@ namespace backend.Controllers
 
             return Ok(cartItems);
         }
+        // [HttpPut("updateCart/{id}")]
+        // [Authorize(Policy = "RequireUserRole")]
+        // public async Task<IActionResult> PutCart(Guid id)
+        // {
+        //     var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        //     if (userClaim == null)
+        //         return Unauthorized("Invalid! Token is missing");
 
+        //     var userId = Guid.Parse(userClaim.Value);
+
+
+        //     await _context.SaveChangesAsync();
+
+        //     return Ok(new { success = true, message = "Cart item quantity updated successfully" });
+        // }
+        [HttpDelete("deletecart/{id}")]
+        public async Task<IActionResult> DeleteCart(Guid id)
+        {
+            var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userClaim == null)
+                return Unauthorized("Invalid! Token is missing");
+
+            var userId = Guid.Parse(userClaim.Value);
+            var cartItem = await _context.Carts.FirstOrDefaultAsync(c => c.UserId == userId && c.CartId == id);
+            if (cartItem == null)
+                return NotFound(new { message = "Cart item not found" });
+            _context.Carts.Remove(cartItem);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Cart item removed successfully" });
+        }
     }
 }
