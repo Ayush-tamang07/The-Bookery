@@ -97,21 +97,32 @@ namespace backend.Controllers
 
             return Ok(cartItems);
         }
-        // [HttpPut("updateCart/{id}")]
-        // [Authorize(Policy = "RequireUserRole")]
-        // public async Task<IActionResult> PutCart(Guid id)
-        // {
-        //     var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-        //     if (userClaim == null)
-        //         return Unauthorized("Invalid! Token is missing");
+        [HttpPut("updatecart/{id}")]
+        [Authorize(Policy = "RequireUserRole")]
+        public async Task<IActionResult> PutCart(Guid id, [FromBody] AddToCartDTO dto)
+        {
+            var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userClaim == null)
+                return Unauthorized("Invalid! Token is missing");
 
-        //     var userId = Guid.Parse(userClaim.Value);
+            var userId = Guid.Parse(userClaim.Value);
 
+            var cartItem = await _context.Carts
+                .FirstOrDefaultAsync(c => c.CartId == id && c.UserId == userId);
 
-        //     await _context.SaveChangesAsync();
+            if (cartItem == null)
+                return NotFound(new { message = "Cart item not found" });
 
-        //     return Ok(new { success = true, message = "Cart item quantity updated successfully" });
-        // }
+            if (dto.Quantity <= 0)
+                return BadRequest(new { message = "Quantity must be greater than zero" });
+
+            cartItem.Quantity = dto.Quantity;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { success = true, message = "Cart item quantity updated successfully" });
+        }
+
         [HttpDelete("deletecart/{id}")]
         public async Task<IActionResult> DeleteCart(Guid id)
         {
