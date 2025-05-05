@@ -47,7 +47,7 @@ namespace backend.Controllers
                 .OrderByDescending(a => a.CreatedAt)
                 .Select(a => new AnnouncementDTO
                 {
-                    AnnouncementId=a.AnnouncementId,
+                    AnnouncementId = a.AnnouncementId,
                     message = a.message,
                     StartTime = a.StartTime,
                     EndTime = a.EndTime,
@@ -77,17 +77,38 @@ namespace backend.Controllers
         public async Task<IActionResult> GetAnnouncements()
         {
             var announcements = await _context.Announcements
-                .Where(a => a.IsActive)
-                // .OrderByDescending(a => a.CreatedAt)
+                .Where(a => a.IsActive && a.StartTime <= DateTime.UtcNow && a.EndTime >= DateTime.UtcNow)
                 .Select(a => new AnnouncementDTO
                 {
                     message = a.message,
                     StartTime = a.StartTime,
-                    EndTime = a.EndTime
+                    EndTime = a.EndTime,
+                    IsActive = a.IsActive
                 })
                 .ToListAsync();
 
             return Ok(announcements);
         }
+        [HttpPut("updateannouncement/{id}")]
+        [Authorize(Policy = "RequireAdminRole")]
+        public async Task<IActionResult> UpdateAnnouncement(Guid id, [FromBody] AddAnnouncementDTO dto)
+        {
+            if (dto.StartTime >= dto.EndTime)
+                return BadRequest("Start time must be before end time.");
+
+            var announcement = await _context.Announcements.FindAsync(id);
+            if (announcement == null)
+                return NotFound(new { message = "Announcement not found" });
+
+            announcement.message = dto.message;
+            announcement.StartTime = dto.StartTime;
+            announcement.EndTime = dto.EndTime;
+            announcement.IsActive = dto.IsActive;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Announcement updated successfully", data = announcement });
+        }
+
     }
 }

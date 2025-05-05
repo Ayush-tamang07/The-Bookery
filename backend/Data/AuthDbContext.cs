@@ -16,6 +16,8 @@ public class AuthDbContext: DbContext
     public DbSet<Cart> Carts{ get; set; }
     public DbSet<Announcement> Announcements{ get; set; }
     public DbSet<Review> Reviews{ get; set; }
+    public DbSet<Order> Orders{ get; set; }
+    public DbSet<OrderItem> OrderItems{ get; set; }
 
     // internal async Task SaveChangesAsync()
     // {

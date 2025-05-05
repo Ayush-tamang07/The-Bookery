@@ -1,29 +1,27 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Backend.Model;
 
 namespace backend.Model;
 
-public class Cart
+public class OrderItem
 {
     [Key]
-    public Guid CartId { get; set; }
+    public Guid OrderItmmId { get; set; }
     [Required]
     public int Quantity { get; set; }
+    
     [Required]
     public decimal PricePerUnit { get; set; }
-    public DateTime DateAdded { get; set; } = DateTime.UtcNow;
 
-    // Foreign Key for User
-    [Required]
-    public Guid UserId { get; set; }
-    [ForeignKey("UserId")]
-    public User User { get; set; }
-
-    // Foreign Key for Book
     [Required]
     public Guid BookId { get; set; }
     [ForeignKey("BookId")]
     public Book Book { get; set; }
+
+    [Required]
+    public Guid OrderId { get; set; }
+    [ForeignKey("OrderId")]
+    public Order Order { get; set; }
+
 }

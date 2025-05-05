@@ -26,5 +26,6 @@ namespace Backend.Model
         public ICollection<BookMark> BookMarks { get; set; }
         public ICollection<Cart> Carts { get; set; }
         public ICollection<Review> Reviews { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

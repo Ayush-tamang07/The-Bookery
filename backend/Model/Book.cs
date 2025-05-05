@@ -65,10 +65,12 @@ public class Book
     [Required(ErrorMessage = "Discount is required")]
     public int Discount { get; set; }
 
-    public DateTime CreatedAt { get; set; }= DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     // public DateTime UpdateAt { get; set; }= DateTime.UtcNow;
-     public ICollection<BookMark> BookMarks { get; set; }
-     public ICollection<Cart> Carts { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+    public ICollection<BookMark> BookMarks { get; set; }
+    public ICollection<Cart> Carts { get; set; }
+    public ICollection<Review> Reviews { get; set; }
+
+    public ICollection<OrderItem> OrderItems { get; set; }
 
 }

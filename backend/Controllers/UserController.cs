@@ -101,7 +101,7 @@ namespace backend.Controllers
 
         // }
         
-        [HttpGet("getDetails")]
+        [HttpGet("getuserdetails")]
         [Authorize(Policy = "RequireUserRole")]
         public async Task<IActionResult> GetDetails()
         {

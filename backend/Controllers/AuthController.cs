@@ -65,7 +65,7 @@ namespace backend.Controllers
                 { 
                     Email = user.Email,
                     Role = user.Role
-                }
+                },
             }
             );
 

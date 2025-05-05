@@ -37,12 +37,10 @@ namespace backend.Controllers
             if (book == null)
                 return NotFound(new { message = "Book not found" });
 
-
             // Check if item already exists in cart (not yet checked out)
             var existingCartItem = await _context.Carts.FirstOrDefaultAsync(c =>
                 c.UserId == userId &&
-                c.BookId == dto.BookId &&
-                !c.IsCheckedOut);
+                c.BookId == dto.BookId);
 
             if (existingCartItem != null)
             {
@@ -59,7 +57,6 @@ namespace backend.Controllers
                     BookId = dto.BookId,
                     PricePerUnit = book.Price,
                     DateAdded = DateTime.UtcNow,
-                    IsCheckedOut = false
                 };
 
                 await _context.Carts.AddAsync(cartItem);
@@ -81,7 +78,7 @@ namespace backend.Controllers
 
             // Fetch cart items for this user that are not checked out
             var cartItems = await _context.Carts
-                .Where(c => c.UserId == userId && !c.IsCheckedOut)
+                .Where(c => c.UserId == userId)
                 .Include(c => c.Book)
                 .Select(c => new
                 {
