@@ -7,7 +7,7 @@ namespace backend.Model;
 public class OrderItem
 {
     [Key]
-    public Guid OrderItmmId { get; set; }
+    public Guid OrderItemId { get; set; }
     [Required]
     public int Quantity { get; set; }
     

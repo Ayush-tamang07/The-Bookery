@@ -22,6 +22,7 @@ namespace Backend.Model
 
         [Required]
         public string Role { get; set; } = "User"; // Default role
+        public int CompleteOrderCount { get; set; }=0;
 
         public ICollection<BookMark> BookMarks { get; set; }
         public ICollection<Cart> Carts { get; set; }
