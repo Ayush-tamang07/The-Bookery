@@ -70,7 +70,7 @@ namespace backend.Controllers
 
             return Ok(new
             {
-            status=200,
+                status = 200,
                 message = "Book created successfully",
                 data = book
             });
@@ -93,7 +93,7 @@ namespace backend.Controllers
 
             return Ok(new { message = "Book deleted successfully." });
         }
-        
+
 
         [HttpPut("updateBook/{id}")]
         [Authorize("RequireAdminRole")]
@@ -202,12 +202,46 @@ namespace backend.Controllers
                     totalItems = totalBooks
                 },
                 data = book
+            }
+            // , Console.WriteLine($"MessageWriter.Write(message: \"{message}\")");
+            );
+        }
+        [HttpPut("updaterole/{userids}")]
+        [Authorize(Policy = "RequireAdminRole")]
+        public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleDTO dto, Guid userids)
+        {
+            // Fetch user by ID
+            var user = await _context.Users.FindAsync(userids);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+
+            // Validate role input (optional: restrict allowed roles)
+            var allowedRoles = new List<string> { "Staff", "User"};
+            if (!allowedRoles.Contains(dto.Role))
+            {
+                return BadRequest(new { message = "Invalid role specified." });
+            }
+
+            // Update role
+            user.Role = dto.Role;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                status = 200,
+                message = "User role updated successfully.",
+                data = new
+                {
+                    user.UserId,
+                    user.UserName,
+                    user.Email,
+                    user.Role
+                }
             });
         }
-
-
-
     }
-
-
 }
