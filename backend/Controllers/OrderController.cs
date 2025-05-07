@@ -168,5 +168,41 @@ namespace backend.Controllers
                 statusCode = 200
             });
         }
+        // [HttpGet("getallorder")]
+        // [Authorize(Roles = "Staff,Admin")]
+        // public async Task<ActionResult> GetOrder(){
+        //     var order = await _context.Orders.ToListAsync();
+        //     return Ok(order);
+        // }
+        [HttpGet("getallorder")]
+        [Authorize(Roles = "Staff,Admin")]
+        public async Task<ActionResult> GetOrder()
+        {
+            var orders = await _context.Orders
+                .Include(o => o.User)
+                .Select(o => new
+                {
+                    o.OrderId,
+                    o.OrderDate,
+                    o.DiscountRate,
+                    o.FinalAmount,
+                    o.Status,
+                    o.ClaimCode,
+                    Username = o.User.UserName,
+                    o.UserId,
+                    OrderItems = o.OrderItems.Select(oi => new
+                    {
+                        oi.OrderItemId,
+                        oi.Quantity,
+                        oi.PricePerUnit,
+                        // oi.BookId,
+                        BookTitle = oi.Book.Title // ✅ Only book title, not full book or null
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(orders);
+        }
+
     }
 }

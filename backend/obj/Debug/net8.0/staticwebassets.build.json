@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8sQk5IIaT9nn9vPbyCWR+KvuauUGIQSCl/K0sLh1Srs=",
+  "Hash": "sQZkqcxx8d6BxxGhIJZ5opAzeEsUe+dQD0DpKzpxN7E=",
   "Source": "backend",
   "BasePath": "_content/backend",
   "Mode": "Default",
@@ -332,6 +332,27 @@
       "OriginalItemSpec": "wwwroot\\uploads\\627a7b30-b95b-4862-b4fd-7031c6538780.png"
     },
     {
+      "Identity": "D:\\The Bookery\\backend\\wwwroot\\uploads\\6c819120-6797-42ef-ab50-0d6f987fb9a0.JPG",
+      "SourceId": "backend",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\The Bookery\\backend\\wwwroot\\",
+      "BasePath": "_content/backend",
+      "RelativePath": "uploads/6c819120-6797-42ef-ab50-0d6f987fb9a0#[.{fingerprint}]?.JPG",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "mbhqm27b4q",
+      "Integrity": "ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\6c819120-6797-42ef-ab50-0d6f987fb9a0.JPG"
+    },
+    {
       "Identity": "D:\\The Bookery\\backend\\wwwroot\\uploads\\6d925ce4-8e8f-4e40-ac8e-946219181a06.png",
       "SourceId": "backend",
       "SourceType": "Discovered",
@@ -561,6 +582,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\caaccec7-41cb-453c-9f00-fa0d0ab34a5d.png"
+    },
+    {
+      "Identity": "D:\\The Bookery\\backend\\wwwroot\\uploads\\d043fc25-1288-4ab5-a0c1-913815e23e02.JPG",
+      "SourceId": "backend",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\The Bookery\\backend\\wwwroot\\",
+      "BasePath": "_content/backend",
+      "RelativePath": "uploads/d043fc25-1288-4ab5-a0c1-913815e23e02#[.{fingerprint}]?.JPG",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "mbhqm27b4q",
+      "Integrity": "ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\d043fc25-1288-4ab5-a0c1-913815e23e02.JPG"
     },
     {
       "Identity": "D:\\The Bookery\\backend\\wwwroot\\uploads\\d3b5e245-cc7b-4f0c-9c38-b5778a485659.png",
@@ -1879,6 +1921,88 @@
       ]
     },
     {
+      "Route": "uploads/6c819120-6797-42ef-ab50-0d6f987fb9a0.JPG",
+      "AssetFile": "D:\\The Bookery\\backend\\wwwroot\\uploads\\6c819120-6797-42ef-ab50-0d6f987fb9a0.JPG",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22300"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 07 May 2025 04:19:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/6c819120-6797-42ef-ab50-0d6f987fb9a0.mbhqm27b4q.JPG",
+      "AssetFile": "D:\\The Bookery\\backend\\wwwroot\\uploads\\6c819120-6797-42ef-ab50-0d6f987fb9a0.JPG",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22300"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 07 May 2025 04:19:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "mbhqm27b4q"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/6c819120-6797-42ef-ab50-0d6f987fb9a0.JPG"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c="
+        }
+      ]
+    },
+    {
       "Route": "uploads/6d925ce4-8e8f-4e40-ac8e-946219181a06.png",
       "AssetFile": "D:\\The Bookery\\backend\\wwwroot\\uploads\\6d925ce4-8e8f-4e40-ac8e-946219181a06.png",
       "Selectors": [],
@@ -2777,6 +2901,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-OApDBNNu5ttJ0VhVRnvCSaTwRJaxQ2GvKud2noqAKrM="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/d043fc25-1288-4ab5-a0c1-913815e23e02.JPG",
+      "AssetFile": "D:\\The Bookery\\backend\\wwwroot\\uploads\\d043fc25-1288-4ab5-a0c1-913815e23e02.JPG",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22300"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 07 May 2025 04:16:47 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/d043fc25-1288-4ab5-a0c1-913815e23e02.mbhqm27b4q.JPG",
+      "AssetFile": "D:\\The Bookery\\backend\\wwwroot\\uploads\\d043fc25-1288-4ab5-a0c1-913815e23e02.JPG",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22300"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 07 May 2025 04:16:47 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "mbhqm27b4q"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/d043fc25-1288-4ab5-a0c1-913815e23e02.JPG"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ztexo7jeoQmvIFcGySrZhORheAxEAPjrOFbwpkZDW9c="
         }
       ]
     },
