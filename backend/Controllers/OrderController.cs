@@ -85,8 +85,12 @@ namespace backend.Controllers
                 });
             }
             var receptor = user.Email;
-            var subject = $"Order Confirmation Details - Order ID: {order.OrderId}";
-            var body = $"Your order has been placed successfully. Order ID: {order.OrderId}. Claim Code: {order.ClaimCode}. Total Amount: {finalTotal}. Discount Applied: {cartLevelDiscount * 100}%.";
+            var subject = $"Order Confirmation - Ref: {order.OrderId}";
+            var body = $"Thank you for your purchase! Your order has been confirmed. Please keep the following details for your records:\n\n" +
+                       $"- Order Reference: {order.OrderId}\n" +
+                       $"- Claim Code: {order.ClaimCode}\n" +
+                       $"You may use the claim code for verification purposes. We appreciate your trust in us!";
+
             await _emailService.SendEmail(receptor, subject, body);
 
             _context.Orders.Add(order);

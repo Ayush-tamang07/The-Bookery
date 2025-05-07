@@ -24,7 +24,7 @@ public class Order
     [ForeignKey("UserId")]
     public User User { get; set; }
 
-    public string ClaimCode { get;  set; }
+    public string? ClaimCode { get;  set; }
     public string Status { get; set; } = "Pending";
     public ICollection<OrderItem> OrderItems { get; set; }
 }

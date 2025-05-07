@@ -24,11 +24,10 @@ namespace backend.Controllers
         public async Task<IActionResult> AddReview(AddReviewDTO dto, Guid id)
         {
             var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-
             if (userClaim == null)
                 return Unauthorized("Invalid! Token is missing");
 
-            var userId = Guid.Parse(userClaim.Value); // Assuming your UserId is Guid
+            var userId = Guid.Parse(userClaim.Value);
 
             var bookExists = await _context.Books.FindAsync(id);
             if (bookExists == null)
@@ -36,6 +35,24 @@ namespace backend.Controllers
 
             if (dto.Rating < 1 || dto.Rating > 5)
                 return BadRequest(new { success = false, message = "Rating must be between 1 and 5" });
+
+            var hasPurchased = await _context.Orders
+                .Where(o => o.UserId == userId)
+                .AnyAsync(o => _context.OrderItems.Any(oi => oi.OrderId == o.OrderId && oi.BookId == id));
+
+            if (!hasPurchased)
+            {
+                return BadRequest(new { success = false, message = "You can only review books you have purchased." });
+            }
+
+            var alreadyReviewed = await _context.Reviews
+                .AnyAsync(r => r.UserId == userId && r.BookId == id);
+
+            if (alreadyReviewed)
+            {
+                return BadRequest(new { success = false, message = "You have already reviewed this book." });
+            }
+
             var review = new Review
             {
                 ReviewId = Guid.NewGuid(),
@@ -44,8 +61,10 @@ namespace backend.Controllers
                 UserId = userId,
                 BookId = id
             };
+
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
+
             return Ok(new { success = true, status = 200, message = "Review submitted successfully" });
         }
 
@@ -99,7 +118,6 @@ namespace backend.Controllers
                 count = reviews.Count,
                 reviews
             });
-
         }
     }
 }
