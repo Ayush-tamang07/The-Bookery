@@ -203,6 +203,41 @@ namespace backend.Controllers
 
             return Ok(orders);
         }
+        [HttpGet("getorder")]
+        [Authorize(Policy = "RequireUserRole")]
+        public async Task<ActionResult> GetOrderByUser()
+        {
+            var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userClaim == null)
+                return Unauthorized("Invalid! Token is missing");
+
+            var userId = Guid.Parse(userClaim.Value);
+
+            var orders = await _context.Orders
+                .Where(o => o.UserId == userId)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Book)
+                .Select(o => new
+                {
+                    o.OrderId,
+                    o.OrderDate,
+                    o.DiscountRate,
+                    o.FinalAmount,
+                    o.Status,
+                    o.ClaimCode,
+                    OrderItems = o.OrderItems.Select(oi => new
+                    {
+                        oi.OrderItemId,
+                        oi.Quantity,
+                        oi.PricePerUnit,
+                        oi.BookId,
+                        BookTitle = oi.Book.Title
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(orders);
+        }
 
     }
 }
