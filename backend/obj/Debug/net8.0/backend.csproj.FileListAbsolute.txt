@@ -128,3 +128,4 @@ D:\The Bookery\backend\bin\Debug\net8.0\System.Web.Http.dll
 D:\The Bookery\backend\bin\Debug\net8.0\System.Web.Http.Cors.dll
 D:\The Bookery\backend\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\The Bookery\backend\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+D:\The Bookery\backend\bin\Debug\net8.0\CloudinaryDotNet.dll

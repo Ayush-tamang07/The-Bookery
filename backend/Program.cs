@@ -61,6 +61,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddSingleton<CloudinaryServices>();
 
 
 var app = builder.Build();

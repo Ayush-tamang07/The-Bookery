@@ -3,6 +3,7 @@ using backend.Data;
 using backend.DTOs.Request;
 using backend.DTOs.Response;
 using backend.Model;
+using backend.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace backend.Controllers
 
         [HttpPost("addBook")]
         [Authorize(Policy = "RequireAdminRole")]
-        public async Task<IActionResult> AddBook([FromForm] AddBookDTO addBook, IFormFile images)
+        public async Task<IActionResult> AddBook([FromForm] AddBookDTO addBook, IFormFile images, [FromServices] CloudinaryServices cloudinaryService)
         {
             if (await _context.Books.AnyAsync(b => b.Title == addBook.Title || b.ISBN == addBook.ISBN))
             {
@@ -31,21 +32,9 @@ namespace backend.Controllers
             }
             // Upload the image
             string imageUrl = null;
-            if (images != null && images.Length > 0)
+            if (images != null)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                if (!Directory.Exists(uploadsFolder))
-                    Directory.CreateDirectory(uploadsFolder);
-
-                var fileName = Guid.NewGuid() + Path.GetExtension(images.FileName);
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await images.CopyToAsync(stream);
-                }
-
-                imageUrl = $"{Request.Scheme}://{Request.Host}/uploads/{fileName}";
+                imageUrl = await cloudinaryService.UploadImageAsync(images);
             }
             var book = new Book
             {
@@ -218,7 +207,7 @@ namespace backend.Controllers
             }
 
             // Validate role input (optional: restrict allowed roles)
-            var allowedRoles = new List<string> { "Staff", "User"};
+            var allowedRoles = new List<string> { "Staff", "User" };
             if (!allowedRoles.Contains(dto.Role))
             {
                 return BadRequest(new { message = "Invalid role specified." });
