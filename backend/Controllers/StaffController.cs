@@ -26,7 +26,9 @@ namespace backend.Controllers
             }
 
             var order = await _context.Orders
-                .Include(o => o.User) // Ensure related user is loaded
+                .Include(o => o.User)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Book) // Include related books
                 .FirstOrDefaultAsync(o => o.ClaimCode == request.ClaimCode);
 
             if (order == null)
@@ -37,6 +39,20 @@ namespace backend.Controllers
             if (order.Status == "Completed")
             {
                 return BadRequest("This order is already marked as completed.");
+            }
+
+            // Deduct quantity for each book in the order
+            foreach (var item in order.OrderItems)
+            {
+                if (item.Book != null)
+                {
+                    if (item.Book.Quantity < item.Quantity)
+                    {
+                        return BadRequest($"Insufficient stock for book: {item.Book.Title}");
+                    }
+
+                    item.Book.Quantity -= item.Quantity;
+                }
             }
 
             order.Status = "Completed";
@@ -50,10 +66,8 @@ namespace backend.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok("Claim code verified successfully. Order marked as completed.");
+            return Ok("Claim code verified successfully. Order marked as completed and stock updated.");
         }
-
-
 
     }
 }

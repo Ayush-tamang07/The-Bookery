@@ -68,7 +68,6 @@ namespace backend.Controllers
                 },
             }
             );
-
         }
 
         [HttpPost("login")]

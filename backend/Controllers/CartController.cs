@@ -37,10 +37,26 @@ namespace backend.Controllers
             if (book == null)
                 return NotFound(new { message = "Book not found" });
 
-            // Check if item already exists in cart (not yet checked out)
+            // Check current quantity in cart (if exists)
             var existingCartItem = await _context.Carts.FirstOrDefaultAsync(c =>
                 c.UserId == userId &&
                 c.BookId == dto.BookId);
+
+            int totalRequestedQuantity = dto.Quantity;
+            if (existingCartItem != null)
+            {
+                totalRequestedQuantity += existingCartItem.Quantity;
+            }
+
+            // Check available stock
+            if (totalRequestedQuantity > book.Quantity)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = $"Only {book.Quantity} units available in stock. You tried to add {totalRequestedQuantity}."
+                });
+            }
 
             if (existingCartItem != null)
             {
@@ -66,6 +82,7 @@ namespace backend.Controllers
 
             return Ok(new { success = true, message = "Book added to cart successfully" });
         }
+
         [HttpGet("getCart")]
         [Authorize(Policy = "RequireUserRole")]
         public async Task<IActionResult> GetCart()
