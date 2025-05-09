@@ -36,15 +36,19 @@ namespace backend.Controllers
             if (dto.Rating < 1 || dto.Rating > 5)
                 return BadRequest(new { success = false, message = "Rating must be between 1 and 5" });
 
-            var hasPurchased = await _context.Orders
-                .Where(o => o.UserId == userId)
-                .AnyAsync(o => _context.OrderItems.Any(oi => oi.OrderId == o.OrderId && oi.BookId == id));
+            // Check if the user purchased this book in any completed order
+            var hasPurchased = await _context.OrderItems
+                .Include(oi => oi.Order)
+                .AnyAsync(oi => oi.BookId == id &&
+                                oi.Order.UserId == userId &&
+                                oi.Order.Status == "Completed");
 
             if (!hasPurchased)
             {
-                return BadRequest(new { success = false, message = "You can only review books you have purchased." });
+                return BadRequest(new { success = false, message = "You can only review books you have purchased in a completed order." });
             }
 
+            // Check if review already exists
             var alreadyReviewed = await _context.Reviews
                 .AnyAsync(r => r.UserId == userId && r.BookId == id);
 
@@ -65,7 +69,7 @@ namespace backend.Controllers
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
-            return Ok(new { success = true, status = 200, message = "Review submitted successfully" });
+            return Ok(new { success = true, status = 200, message = "Review submitted successfully." });
         }
 
         [HttpGet("getreview/{id}")]
