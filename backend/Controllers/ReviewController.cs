@@ -13,7 +13,6 @@ namespace backend.Controllers
     [ApiController]
     public class ReviewController : ControllerBase
     {
-
         private readonly AuthDbContext _context;
         public ReviewController(AuthDbContext context)
         {
