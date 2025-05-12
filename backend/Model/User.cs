@@ -7,7 +7,7 @@ namespace Backend.Model
     public class User
     {
         [Key]
-        public Guid UserId { get; set; } // PascalCase and "Id" instead of "ID"
+        public Guid UserId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -21,7 +21,7 @@ namespace Backend.Model
         public string PasswordHash { get; set; } = string.Empty;
 
         [Required]
-        public string Role { get; set; } = "User"; // Default role
+        public string Role { get; set; } = "User"; 
         public int CompleteOrderCount { get; set; }=0;
 
         public ICollection<BookMark> BookMarks { get; set; }

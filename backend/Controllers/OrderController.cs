@@ -196,7 +196,7 @@ namespace backend.Controllers
                         oi.Quantity,
                         oi.PricePerUnit,
                         // oi.BookId,
-                        BookTitle = oi.Book.Title // ✅ Only book title, not full book or null
+                        BookTitle = oi.Book.Title, // ✅ Only book title, not full book or null
                     }).ToList()
                 })
                 .ToListAsync();
@@ -224,14 +224,16 @@ namespace backend.Controllers
                     o.DiscountRate,
                     o.FinalAmount,
                     o.Status,
-                    o.ClaimCode,
+                    // o.ClaimCode,
                     OrderItems = o.OrderItems.Select(oi => new
                     {
                         oi.OrderItemId,
                         oi.Quantity,
                         oi.PricePerUnit,
                         oi.BookId,
-                        BookTitle = oi.Book.Title
+                        BookTitle = oi.Book.Title,
+                        BookImage=oi.Book.Image
+
                     }).ToList()
                 })
                 .ToListAsync();
