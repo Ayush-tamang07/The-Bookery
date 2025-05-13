@@ -33,7 +33,7 @@ namespace backend.Controllers
             var order = await _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Book) // Include related books
+                    .ThenInclude(oi => oi.Book) 
                 .FirstOrDefaultAsync(o => o.ClaimCode == request.ClaimCode);
 
             if (order == null)
@@ -46,7 +46,6 @@ namespace backend.Controllers
                 return BadRequest("This order is already marked as completed.");
             }
 
-            // Deduct quantity for each book in the order
             foreach (var item in order.OrderItems)
             {
                 if (item.Book != null)
@@ -64,7 +63,6 @@ namespace backend.Controllers
             order.ClaimCode = null;
 
 
-            // Increment completed order count 
             if (order.User != null)
             {
                 order.User.CompleteOrderCount += 1;
@@ -73,9 +71,7 @@ namespace backend.Controllers
             string purchaserName = order.User?.UserName ?? "A user";
             string purchasedBooks = string.Join(", ", order.OrderItems.Select(i => i.Book.Title));
 
-             // Send SignalR notification
              await _hubContext.Clients.All.SendAsync("ReceiveMessage", "Purchased Book", $"{purchaserName} has purchased: {purchasedBooks}");
-            // Add database notification
              var addNotification = new Notification
              {
                  Message = $"{purchaserName} has purchased: {purchasedBooks}",

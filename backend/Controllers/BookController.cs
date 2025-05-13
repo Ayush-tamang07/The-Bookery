@@ -44,5 +44,12 @@ namespace backend.Controllers
 
             return Ok(newBooks);
         }
+        [HttpGet("awardwinning")]
+        public async Task<IActionResult> GetAwardWinne(){
+            var book = await _context.Books.Where(b => b.AwardWinner == true)
+        .ToListAsync();
+            return Ok(book);
+        }
+
     }
 }

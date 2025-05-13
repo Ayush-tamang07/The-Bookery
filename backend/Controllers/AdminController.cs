@@ -52,7 +52,7 @@ namespace backend.Controllers
                 ISBN = addBook.ISBN,
                 Price = addBook.Price,
                 Quantity = addBook.Quantity,
-                Discount = addBook.Discount,
+                // Discount = addBook.Discount,
                 AwardWinner = addBook.AwardWinner,
             };
 
@@ -122,7 +122,9 @@ namespace backend.Controllers
         [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users
+            .Where(u => u.Role == "User" || u.Role == "Staff") 
+            .ToListAsync();
 
             // Map users to UserDTO
             var userDtos = users.Select(u => new UserDTO
@@ -136,7 +138,8 @@ namespace backend.Controllers
             return userDtos;
         }
         [HttpGet("getbook")]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        [Authorize(Policy ="RequireAdminRole")]
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
             if (page <= 0 || pageSize <= 0)
             {
@@ -172,7 +175,10 @@ namespace backend.Controllers
                 Price = b.Price,
                 Quantity = b.Quantity,
                 Discount = b.Discount,
-                CreatedAt = b.CreatedAt
+                CreatedAt = b.CreatedAt,
+                AwardWinner = b.AwardWinner,
+                StartDate = b.StartDate,
+                EndDate = b.EndDate
             }).ToList();
 
             // return Ok(new

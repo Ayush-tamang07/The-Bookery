@@ -21,4 +21,7 @@ public class BookDTO
     public DateTime CreatedAt { get; set; }
       public double AverageRating { get; set; }
     public int TotalReviews { get; set; }
+    public bool AwardWinner { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
 }

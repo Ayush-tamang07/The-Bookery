@@ -86,7 +86,7 @@ namespace backend.Controllers
         [HttpGet("getbook")]
         public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks(
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10)
+            [FromQuery] int pageSize = 50)
         {
             if (page <= 0 || pageSize <= 0)
             {
@@ -124,6 +124,8 @@ namespace backend.Controllers
                 Quantity = b.Quantity,
                 Discount = b.Discount,
                 CreatedAt = b.CreatedAt,
+                 StartDate = b.StartDate,
+                EndDate = b.EndDate,
 
                 AverageRating = b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0,
                 TotalReviews = b.Reviews.Count
@@ -187,6 +189,13 @@ namespace backend.Controllers
                 return NotFound("User not found");
 
             return Ok(user);
+        }
+        [HttpGet("fetchnotification")]
+        [Authorize(Policy ="RequireUserRole")]
+        public async Task<ActionResult> GetReview()
+        {
+            var notificaiton = await _context.Notifications.ToListAsync();
+            return Ok(notificaiton);
         }
     }
 }
