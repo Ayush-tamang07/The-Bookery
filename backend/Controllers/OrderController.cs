@@ -102,7 +102,7 @@ namespace backend.Controllers
             {
                 status = "success",
                 message = "Order placed successfully",
-                statusCode = 200,
+                statusCode = 200, 
                 data = new
                 {
                     orderId = order.OrderId,
@@ -152,28 +152,23 @@ namespace backend.Controllers
                 }
             });
         }
-        [HttpPost("sendEmail")]
-        public async Task<IActionResult> SendEmail([FromBody] Email request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        // [HttpPost("sendEmail")]
+        // public async Task<IActionResult> SendEmail([FromBody] Email request)
+        // {
+        //     if (!ModelState.IsValid)
+        //     {
+        //         return BadRequest(ModelState);
+        //     }
 
-            await _emailService.SendEmail(request.Receptor, request.Subject, request.Body);
-            return Ok(new
-            {
-                status = "success",
-                message = "Email sent successfully",
-                statusCode = 200
-            });
-        }
-        // [HttpGet("getallorder")]
-        // [Authorize(Roles = "Staff,Admin")]
-        // public async Task<ActionResult> GetOrder(){
-        //     var order = await _context.Orders.ToListAsync();
-        //     return Ok(order);
+        //     await _emailService.SendEmail(request.Receptor, request.Subject, request.Body);
+        //     return Ok(new
+        //     {
+        //         status = "success",
+        //         message = "Email sent successfully",
+        //         statusCode = 200
+        //     });
         // }
+
         [HttpGet("getallorder")]
         [Authorize(Roles = "Staff,Admin")]
         public async Task<ActionResult> GetOrder()
@@ -187,16 +182,14 @@ namespace backend.Controllers
                     o.DiscountRate,
                     o.FinalAmount,
                     o.Status,
-                    o.ClaimCode,
                     Username = o.User.UserName,
-                    o.UserId,
                     OrderItems = o.OrderItems.Select(oi => new
                     {
                         oi.OrderItemId,
                         oi.Quantity,
                         oi.PricePerUnit,
                         // oi.BookId,
-                        BookTitle = oi.Book.Title, // ✅ Only book title, not full book or null
+                        BookTitle = oi.Book.Title,
                     }).ToList()
                 })
                 .ToListAsync();

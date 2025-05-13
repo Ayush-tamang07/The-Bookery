@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using backend.Data;
 using backend.DTOs.Request;
 using backend.DTOs.Response;
@@ -52,6 +53,7 @@ namespace backend.Controllers
                 Price = addBook.Price,
                 Quantity = addBook.Quantity,
                 Discount = addBook.Discount,
+                AwardWinner = addBook.AwardWinner,
             };
 
             _context.Books.Add(book);
@@ -195,18 +197,18 @@ namespace backend.Controllers
             // , Console.WriteLine($"MessageWriter.Write(message: \"{message}\")");
             );
         }
-        [HttpPut("updaterole/{userids}")]
+        [HttpPut("updaterole/{email}")]
         [Authorize(Policy = "RequireAdminRole")]
-        public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleDTO dto, Guid userids)
+        public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleDTO dto, string email)
         {
-            // Fetch user by ID
-            var user = await _context.Users.FindAsync(userids);
+            // Fetch user by email
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
                 return NotFound(new { message = "User not found." });
             }
 
-            // Validate role input (optional: restrict allowed roles)
+            // Validate role input
             var allowedRoles = new List<string> { "Staff", "User" };
             if (!allowedRoles.Contains(dto.Role))
             {
@@ -230,6 +232,31 @@ namespace backend.Controllers
                     user.Email,
                     user.Role
                 }
+            });
+        }
+
+        [HttpPut("discountoffer/{bookid}")]
+        [Authorize(Policy = "RequireAdminRole")]
+        public async Task<ActionResult> DiscountOffer(Guid bookid, DiscountDTO discount)
+        {
+            var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userClaim == null) return Unauthorized("Invalid !! Token is missing");
+
+            var books = await _context.Books.FindAsync(bookid);
+            if (books != null)
+            {
+                books.Discount = discount.Discount;
+                books.StartDate = discount.StartDate;
+                books.EndDate = discount.EndDate;
+                // bookDetails.IsOnSale = discount.IsOnSale;
+            }
+
+            _context.Books.Update(books);
+            await _context.SaveChangesAsync();
+            return Ok(new
+            {
+                status = "success",
+                message = "Discount added successfully"
             });
         }
     }

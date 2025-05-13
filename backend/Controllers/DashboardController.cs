@@ -2,7 +2,7 @@ using backend.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // ✅ Required for CountAsync()
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {

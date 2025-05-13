@@ -23,8 +23,70 @@ namespace backend.Controllers
             _context = context;
         }
 
+        // [HttpGet("getbook")]
+        // public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        // {
+        //     if (page <= 0 || pageSize <= 0)
+        //     {
+        //         return BadRequest(new
+        //         {
+        //             status = "error",
+        //             code = 400,
+        //             message = "Page and pageSize must be greater than 0"
+        //         });
+        //     }
+        //     // var bookList = await _context.Books.ToListAsync();
+        //     var totalBooks = await _context.Books.CountAsync();
+        //     var totalPages = (int)Math.Ceiling(totalBooks / (double)pageSize);
+        //     var books = await _context.Books
+        // .Skip((page - 1) * pageSize)
+        // .Take(pageSize)
+        // .ToListAsync();
+
+        //     // Map users to UserDTO
+        //     var book = books.Select(b => new BookDTO
+        //     {
+        //         BookId = b.BookId,
+        //         Title = b.Title,
+        //         Description = b.Description,
+        //         Author = b.Author,
+        //         Genre = b.Genre,
+        //         Image = b.Image,
+        //         PublishDate = b.PublishDate,
+        //         Publisher = b.Publisher,
+        //         Language = b.Language,
+        //         Format = b.Format,
+        //         ISBN = b.ISBN,
+        //         Price = b.Price,
+        //         Quantity = b.Quantity,
+        //         Discount = b.Discount,
+        //         CreatedAt = b.CreatedAt
+        //     }).ToList();
+
+        //     // return Ok(new
+        //     // {
+        //     //     message = "Books retrieved successfully.",
+        //     //     data = book
+        //     // });
+        //     return Ok(new
+        //     {
+        //         status = "success",
+        //         code = 200,
+        //         message = "Books retrieved successfully",
+        //         pagination = new
+        //         {
+        //             currentPage = page,
+        //             pageSize = pageSize,
+        //             totalPages = totalPages,
+        //             totalItems = totalBooks
+        //         },
+        //         data = book
+        //     });
+        // }
         [HttpGet("getbook")]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
             if (page <= 0 || pageSize <= 0)
             {
@@ -35,16 +97,17 @@ namespace backend.Controllers
                     message = "Page and pageSize must be greater than 0"
                 });
             }
-            // var bookList = await _context.Books.ToListAsync();
+
             var totalBooks = await _context.Books.CountAsync();
             var totalPages = (int)Math.Ceiling(totalBooks / (double)pageSize);
-            var books = await _context.Books
-        .Skip((page - 1) * pageSize)
-        .Take(pageSize)
-        .ToListAsync();
 
-            // Map users to UserDTO
-            var book = books.Select(b => new BookDTO
+            var books = await _context.Books
+                .Include(b => b.Reviews)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var bookDtos = books.Select(b => new BookDTO
             {
                 BookId = b.BookId,
                 Title = b.Title,
@@ -60,14 +123,12 @@ namespace backend.Controllers
                 Price = b.Price,
                 Quantity = b.Quantity,
                 Discount = b.Discount,
-                CreatedAt = b.CreatedAt
+                CreatedAt = b.CreatedAt,
+
+                AverageRating = b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0,
+                TotalReviews = b.Reviews.Count
             }).ToList();
 
-            // return Ok(new
-            // {
-            //     message = "Books retrieved successfully.",
-            //     data = book
-            // });
             return Ok(new
             {
                 status = "success",
@@ -80,7 +141,7 @@ namespace backend.Controllers
                     totalPages = totalPages,
                     totalItems = totalBooks
                 },
-                data = book
+                data = bookDtos
             });
         }
 
@@ -100,7 +161,7 @@ namespace backend.Controllers
         // {
 
         // }
-        
+
         [HttpGet("getuserdetails")]
         [Authorize(Policy = "RequireUserRole")]
         public async Task<IActionResult> GetDetails()

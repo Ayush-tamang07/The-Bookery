@@ -78,12 +78,14 @@ namespace backend.Controllers
                 .Where(r => r.BookId == id)
                 .Select(r => new
                 {
-                    r.ReviewId,
+                    // r.ReviewId,
                     r.Comment,
                     r.Rating,
-                    r.BookId,
+                    // r.BookId,
                     r.Book.Title,
-                    // r.UserId // optionally include user info
+                    r.CreatedAt,
+                    // r.UserId,
+                    Username = r.User.UserName
                 })
                 .ToListAsync();
 

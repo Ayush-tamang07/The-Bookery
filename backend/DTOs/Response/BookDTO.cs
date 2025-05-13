@@ -19,4 +19,6 @@ public class BookDTO
     public int Quantity { get; set; }
     public int Discount { get; set; }
     public DateTime CreatedAt { get; set; }
+      public double AverageRating { get; set; }
+    public int TotalReviews { get; set; }
 }
