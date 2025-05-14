@@ -21,7 +21,6 @@ BookLett/
    git clone https://github.com/Ayush-tamang07/The-Bookery.git
    cd The Bookery
 
-
 # 2. Setup Frontend
 ```bash
 cd frontend
