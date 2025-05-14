@@ -19,5 +19,6 @@ public class AddBookDTO
     public int Discount { get; set; }
     public DateTime CreatedAt { get; set; }= DateTime.UtcNow;
     public bool AwardWinner { get; set; }
+    // public string imageUrl { get; set; }
 
 }

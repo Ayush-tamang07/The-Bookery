@@ -79,6 +79,7 @@ namespace backend.Controllers
                 return NotFound(new { message = "Book not found." });
             }
 
+
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
 
@@ -88,13 +89,18 @@ namespace backend.Controllers
 
         [HttpPut("updateBook/{id}")]
         [Authorize("RequireAdminRole")]
-        public async Task<IActionResult> UpdateBook(Guid id, [FromBody] AddBookDTO updatedBook)
+        public async Task<IActionResult> UpdateBook(Guid id, [FromForm] AddBookDTO updatedBook, IFormFile images, [FromServices] CloudinaryServices cloudinaryService)
         {
             var book = await _context.Books.FindAsync(id);
 
             if (book == null)
             {
                 return NotFound(new { message = "Book not found." });
+            }
+            string imageUrl = null;
+            if (images != null)
+            {
+                imageUrl = await cloudinaryService.UploadImageAsync(images);
             }
 
             // Update book properties
@@ -110,6 +116,8 @@ namespace backend.Controllers
             book.Price = updatedBook.Price;
             book.Quantity = updatedBook.Quantity;
             book.Discount = updatedBook.Discount;
+            book.Image = imageUrl ?? book.Image;
+
 
             _context.Books.Update(book);
             await _context.SaveChangesAsync();
@@ -117,13 +125,12 @@ namespace backend.Controllers
             return Ok(new { message = "Book updated successfully.", data = book });
         }
 
-        // get user details by admin
         [HttpGet("getuserdetails")]
         [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
             var users = await _context.Users
-            .Where(u => u.Role == "User" || u.Role == "Staff") 
+            .Where(u => u.Role == "User" || u.Role == "Staff")
             .ToListAsync();
 
             // Map users to UserDTO
@@ -138,7 +145,7 @@ namespace backend.Controllers
             return userDtos;
         }
         [HttpGet("getbook")]
-        [Authorize(Policy ="RequireAdminRole")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
             if (page <= 0 || pageSize <= 0)
