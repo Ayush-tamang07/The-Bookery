@@ -18,8 +18,8 @@ BookLett/
 
 1. Clone the repository
    ```bash
-git clone https://github.com/subin1rai/BookLett.git
-cd BookLett
+   git clone https://github.com/Ayush-tamang07/The-Bookery.git
+   cd The Bookery
 
 
 # 2. Setup Frontend
