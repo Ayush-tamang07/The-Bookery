@@ -86,10 +86,34 @@ namespace backend.Controllers
             }
             var receptor = user.Email;
             var subject = $"Order Confirmation - Ref: {order.OrderId}";
-            var body = $"Thank you for your purchase! Your order has been confirmed. Please keep the following details for your records:\n\n" +
-                       $"- Order Reference: {order.OrderId}\n" +
-                       $"- Claim Code: {order.ClaimCode}\n" +
-                       $"You may use the claim code for verification purposes. We appreciate your trust in us!";
+            var body = $@"
+                    <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; border: 1px solid #ddd; font-family: ""Helvetica Neue"", Helvetica, Arial, sans-serif; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);'>
+                    
+                        <div style='background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%); padding: 25px; color: #fff; text-align: center;'>
+                            <h2 style='margin: 0; font-size: 26px;'>🎉 Order Confirmed 🎉</h2>
+                        </div>
+                    
+                        <div style='padding: 30px; text-align: center;'>
+                            <p style='font-size: 18px; color: #333;'>We’re happy to let you know that your order has been successfully placed.</p>
+                    
+                            <div style='margin: 25px 0; font-size: 34px; font-weight: bold; color: #e74c3c; letter-spacing: 1px;'>
+                                {order.ClaimCode}
+                            </div>
+                    
+                            <div style='font-size: 16px; color: #555; text-align: left; max-width: 80%; margin: 0 auto;'>
+                                <p><strong>🆔 Order ID:</strong> {order.OrderId}</p>
+                                <p><strong>💰 Total Amount:</strong> Rs. {order.FinalAmount}</p>
+                            </div>
+                    
+                            <p style='margin-top: 30px; font-size: 15px; color: #666;'>Thank you for shopping with <strong>Bookery</strong>. We appreciate your trust!</p>
+                        </div>
+                    
+                        <div style='background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 13px; color: #999;'>
+                            &copy; {DateTime.UtcNow.Year} Bookery. All rights reserved.
+                        </div>
+                    </div>";
+
+
 
             await _emailService.SendEmail(receptor, subject, body);
 
@@ -102,7 +126,7 @@ namespace backend.Controllers
             {
                 status = "success",
                 message = "Order placed successfully",
-                statusCode = 200, 
+                statusCode = 200,
                 data = new
                 {
                     orderId = order.OrderId,
@@ -225,7 +249,7 @@ namespace backend.Controllers
                         oi.PricePerUnit,
                         oi.BookId,
                         BookTitle = oi.Book.Title,
-                        BookImage=oi.Book.Image
+                        BookImage = oi.Book.Image
 
                     }).ToList()
                 })

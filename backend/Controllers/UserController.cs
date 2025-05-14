@@ -84,7 +84,7 @@ namespace backend.Controllers
         //     });
         // }
         [HttpGet("getbook")]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks(
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBookByUser(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 50)
         {

@@ -65,10 +65,13 @@ public class Book
     [Required(ErrorMessage = "Discount is required")]
     public int Discount { get; set; }
 
-    public bool AwardWinner { get; set; }= false;
+    public bool AwardWinner { get; set; } = false;
 
     public DateTime? StartDate { get; set; }
-    public DateTime? EndDate { get; set;}
+    public DateTime? EndDate { get; set; }
+    public bool AvailableInLibrary { get; set; } = true;
+
+    public bool IsOnSale { get; set; } = false;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     // public DateTime UpdateAt { get; set; }= DateTime.UtcNow;

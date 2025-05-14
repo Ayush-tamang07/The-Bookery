@@ -24,7 +24,7 @@ namespace backend.Controllers
 
         [HttpPost("addtocart")]
         [Authorize(Policy = "RequireUserRole")]
-        public async Task<IActionResult> addToCart([FromBody] AddToCartDTO dto)
+        public async Task<IActionResult> AddToCart([FromBody] AddToCartDTO dto)
         {
             var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userClaim == null)
@@ -116,7 +116,7 @@ namespace backend.Controllers
         }
         [HttpPut("updatecart/{id}")]
         [Authorize(Policy = "RequireUserRole")]
-        public async Task<IActionResult> PutCart(Guid id, [FromBody] AddToCartDTO dto)
+        public async Task<IActionResult> UpdateCart(Guid id, [FromBody] AddToCartDTO dto)
         {
             var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userClaim == null)

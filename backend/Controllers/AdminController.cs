@@ -146,7 +146,7 @@ namespace backend.Controllers
         }
         [HttpGet("getbook")]
         [Authorize(Policy = "RequireAdminRole")]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 30)
         {
             if (page <= 0 || pageSize <= 0)
             {

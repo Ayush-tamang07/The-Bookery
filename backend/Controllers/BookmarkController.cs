@@ -109,7 +109,7 @@ namespace backend.Controllers
         // }
         [HttpDelete("removebookmark/{bookId}")]
         [Authorize(Policy = "RequireUserRole")]
-        public async Task<IActionResult> RemoveWishlist(Guid bookId)
+        public async Task<IActionResult> RemoveBookMark(Guid bookId)
         {
             var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 

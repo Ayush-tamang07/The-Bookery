@@ -21,7 +21,7 @@ namespace backend.Controllers
         }
         [HttpPost("addannouncement")]
         [Authorize(Policy = "RequireAdminRole")]
-        public async Task<IActionResult> addAnnouncement([FromBody] AddAnnouncementDTO dto)
+        public async Task<IActionResult> AddAnnouncement([FromBody] AddAnnouncementDTO dto)
         {
             if (dto.StartTime >= dto.EndTime)
                 return BadRequest("Start time must be before end time.");
